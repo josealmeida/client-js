@@ -17,6 +17,11 @@ function FhirClient(p) {
     //    bearer --> token
     // }
 
+    // Temporary workaround for issue with base URL in Epic (TO DO: remove)
+    if (p.serviceUrl.endsWith('/')) {
+      p.serviceUrl = p.serviceUrl.substring(0, p.serviceUrl.length-1)
+    }
+
     var client = new ClientPrototype();
     var fhir = Adapter.get().fhirjs;
 
@@ -63,11 +68,6 @@ function FhirClient(p) {
     server.auth = server.auth ||  {
       type: 'none'
     };
-
-    // Temporary workaround for issue with base URL in Epic (TO DO: remove)
-    if (client.server.serviceUrl.endsWith('/')) {
-      client.server.serviceUrl = client.server.serviceUrl.substring(0, client.server.serviceUrl.length-1)
-    }
 
     if (!client.server.serviceUrl || !client.server.serviceUrl.match(/https?:\/\/.+[^\/]$/)) {
       throw "Must supply a `server` property whose `serviceUrl` begins with http(s) " + 
